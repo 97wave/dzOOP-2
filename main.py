@@ -6,7 +6,15 @@ class Student:
         self.gender = gender
         self.finished_courses = []
         self.courses_in_progress = []
-        self.grades = {}
+        self.grades = {} 
+
+    def __str__(self):
+        return (f"""Имя: {self.name}
+Фамилия: {self.surname}
+Средняя оценка за домашние задания: {self.average_grade()}
+Изучаемые курсы: {self.courses_in_progress}
+Пройденные курсы: {self.finished_courses}""")
+
 
     def rate_lecture(self, lecturer, course, grade):
         if isinstance(lecturer, Lecturer) and course in self.courses_in_progress and course in lecturer.courses_attached and 1 <= grade <= 10:
@@ -17,9 +25,16 @@ class Student:
         else:
             print('Ошибка')
             return 'Ошибка'
-            
 
-        
+    def average_grade(self):
+        sum_ = 0
+        cnt = 0
+        for course in self.grades.values():
+            for grade in course:
+                sum_ += grade
+                cnt += 1
+        return sum_ / cnt
+
 
 class Mentor:
 
@@ -34,6 +49,21 @@ class Lecturer(Mentor):
         super().__init__(name, surname)
         self.courses_attached = []
         self.grades = {}
+
+    def average_grade(self):
+        sum_ = 0
+        cnt = 0
+        for course in self.grades.values():
+            for grade in course:
+                sum_ += grade
+                cnt += 1
+        return sum_ / cnt
+    
+    def __str__(self):
+        return (f"""Имя: {self.name}
+Фамилия: {self.surname}
+Средняя оценка за лекции: {self.average_grade()}""")
+
 
 class Reviewer(Mentor):
     
@@ -50,6 +80,10 @@ class Reviewer(Mentor):
         else:
             print('Ошибка')
             return 'Ошибка'
+    
+    def __str__(self):
+        return (f"""Имя: {self.name}
+Фамилия: {self.surname}""")
 
 
 
@@ -61,7 +95,8 @@ new_student = Student('Gennadiy', 'Sidorov', 'м')
 print(new_lecturer.name)
 print(new_reviewer.surname)
 print(new_student.name, new_student.surname)
-print('')
+print()
+
 
 print(new_reviewer.courses_attached)
 new_reviewer.courses_attached += ['Python', 'Git']
@@ -69,12 +104,31 @@ new_lecturer.courses_attached += ['Python', 'Git']
 new_student.courses_in_progress += ['Python', 'Git']
 print(new_reviewer.courses_attached)
 print(new_student.courses_in_progress)
-print('')
+print()
+
 
 new_reviewer.rate_hw(new_student, 'Python', 20)
+new_reviewer.rate_hw(new_student, 'Python', 8)
+new_reviewer.rate_hw(new_student, 'Python', 10)
+new_reviewer.rate_hw(new_student, 'Git', 6)
 print(new_student.grades)
-print('')
+print()
 
-new_student.rate_lecture(new_lecturer, 'Git', 10)
+new_student.rate_lecture(new_lecturer, 'Git', 8)
+new_student.rate_lecture(new_lecturer, 'Python', 10)
 print(new_lecturer.grades)
-print('')
+print()
+
+
+print(new_student.average_grade())
+print(new_lecturer.average_grade())
+print()
+
+
+print(new_student)
+print()
+print(new_reviewer)
+print()
+print(new_lecturer)
+print()
+
