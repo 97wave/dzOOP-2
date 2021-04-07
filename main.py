@@ -15,6 +15,13 @@ class Student:
 Изучаемые курсы: {self.courses_in_progress}
 Пройденные курсы: {self.finished_courses}""")
 
+    def __gt__(self, other):
+        if isinstance(other, Student):
+            return self.average_grade() > other.average_grade()
+
+    def __ge__(self, other):
+        if isinstance(other, Student):
+            return self.average_grade() > other.average_grade()
 
     def rate_lecture(self, lecturer, course, grade):
         if isinstance(lecturer, Lecturer) and course in self.courses_in_progress and course in lecturer.courses_attached and 1 <= grade <= 10:
@@ -49,6 +56,14 @@ class Lecturer(Mentor):
         super().__init__(name, surname)
         self.courses_attached = []
         self.grades = {}
+
+    def __gt__(self, other):
+        if isinstance(other, Lecturer):
+            return self.average_grade() > other.average_grade()
+
+    def __ge__(self, other):
+        if isinstance(other, Lecturer):
+            return self.average_grade() > other.average_grade()
 
     def average_grade(self):
         sum_ = 0
@@ -131,4 +146,18 @@ print(new_reviewer)
 print()
 print(new_lecturer)
 print()
+
+
+new_student_2 = Student('Alexander', 'Ivanov', 'м')
+new_student_2.courses_in_progress += ['Python', 'Git']
+new_reviewer.rate_hw(new_student_2, 'Python', 10)
+new_reviewer.rate_hw(new_student_2, 'Python', 8)
+
+new_lecturer_2 = Lecturer('Alexey', 'Isaev')
+new_lecturer_2.courses_attached += ['Python', 'Git']
+new_student.rate_lecture(new_lecturer_2, 'Python', 10)
+
+print(new_student_2.average_grade())
+print(new_student > new_student_2)
+print(new_lecturer != new_lecturer_2)
 
