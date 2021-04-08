@@ -1,4 +1,5 @@
 class Student:
+    objects_list = []
 
     def __init__(self, name, surname, gender):
         self.name = name
@@ -7,6 +8,7 @@ class Student:
         self.finished_courses = []
         self.courses_in_progress = []
         self.grades = {} 
+        self.objects_list += [self]
 
     def __str__(self):
         return (f"""Имя: {self.name}
@@ -51,11 +53,13 @@ class Mentor:
         
 
 class Lecturer(Mentor):
-    
+    objects_list = []
+
     def __init__(self, name, surname):
         super().__init__(name, surname)
         self.courses_attached = []
         self.grades = {}
+        self.objects_list += [self]
 
     def __gt__(self, other):
         if isinstance(other, Lecturer):
@@ -103,7 +107,21 @@ class Reviewer(Mentor):
 
 
 
+def course_average_grade(objects, course):
+    sum_ = 0
+    cnt = 0
+    for object_ in objects:
+        for course_name, grades_list in object_.grades.items():
+            if course_name == course:
+                for grade in grades_list:
+                    sum_ += grade
+                    cnt += 1
+    return (sum_ / cnt)
+
  
+
+
+
 new_lecturer = Lecturer('Vasiliy', 'Petrov')
 new_reviewer = Reviewer('Andrey', 'Grachev')
 new_student = Student('Gennadiy', 'Sidorov', 'м')
@@ -151,7 +169,7 @@ print()
 new_student_2 = Student('Alexander', 'Ivanov', 'м')
 new_student_2.courses_in_progress += ['Python', 'Git']
 new_reviewer.rate_hw(new_student_2, 'Python', 10)
-new_reviewer.rate_hw(new_student_2, 'Python', 8)
+new_reviewer.rate_hw(new_student_2, 'Python', 6)
 
 new_lecturer_2 = Lecturer('Alexey', 'Isaev')
 new_lecturer_2.courses_attached += ['Python', 'Git']
@@ -160,4 +178,14 @@ new_student.rate_lecture(new_lecturer_2, 'Python', 10)
 print(new_student_2.average_grade())
 print(new_student > new_student_2)
 print(new_lecturer != new_lecturer_2)
+print()
 
+
+print(Student.objects_list)
+print(course_average_grade(Student.objects_list, 'Python'))
+print(course_average_grade(Student.objects_list, 'Git'))
+print()
+
+print(Lecturer.objects_list)
+print(course_average_grade(Lecturer.objects_list, 'Python'))
+print(course_average_grade(Lecturer.objects_list, 'Git'))
